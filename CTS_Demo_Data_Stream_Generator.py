@@ -72,9 +72,9 @@ def AirCraftDetail():
 # Function to generate Flight Journey details
 def GenTripDetails():
     # print("Nothing")
-    producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
-                             value_serializer=lambda x:
-                             json.dumps(x).encode('utf-8'))
+    #producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+     #                        value_serializer=lambda x:
+      #                       json.dumps(x).encode('utf-8'))
     counter = random.randint(5,20)
     while(counter>0):
         P = random.choice(Passengers)
@@ -93,8 +93,7 @@ def GenTripDetails():
                + P["LastName"] + sep \
                + P["MoreDetails"]["DOB"]
         print(data)
-        producer.send('test',value=data,key=bytes(O+" "+D,'utf-8')#,headers=[('content-encoding', b'base64')]
-                      )
+        #producer.send('test',value=data,key=bytes(O+" "+D,'utf-8')#,headers=[('content-encoding', b'base64')]                      )
         counter = counter -1
     time.sleep(random.randint(5,8))
     # with open(Basepath+"Trips.csv","w") as fh:
