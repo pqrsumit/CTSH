@@ -1,5 +1,5 @@
 # Author:- Sumit Bunage
-# Purpose:- A Simple Python Program to Generate Dummy Flight Data for demo Purpose
+# Purpose:- A Simple Python Program to Geenrate Dummy Flight Data for demo Purpose
 
 # import necessary package
 import time
@@ -39,7 +39,8 @@ def GenPassengers():
         # print(bd)
         passport = random.choice(Alpha)+"-"+ str(random.randint(6683348,77456612))
         mealPref = random.choice(["Veg","Non-Veg","Any"])
-        p = {"FirstName":f,"LastName":l,"MoreDetails":{"Passport":passport,"PersonalDetails":{"Gender":g,"DOB":bd,"MealPreference":mealPref}}}
+        someint = random.randint(1,100)
+        p = {"FirstName":f,"LastName":l,"randomint":someint,"MoreDetails":{"Passport":passport,"PersonalDetails":{"Gender":g,"DOB":bd,"MealPreference":mealPref}}}
         # print(p)
         Passengers.append(p)
     with open(Basepath+"Passengers.json","w") as fh:
