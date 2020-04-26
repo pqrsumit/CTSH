@@ -1,5 +1,5 @@
 # Author:- Sumit Bunage
-# Purpose:- A Simple Python Program to Geenrate Dummy Flight Data for demo Purpose
+# Purpose:- A Simple Python Program to Generate Dummy Flight Data for demo Purpose
 
 # import necessary package
 import time
@@ -10,10 +10,10 @@ import uuid
 import datetime
 import os
 import json
-from kafka import KafkaProducer
+# from kafka import KafkaProducer
 
 
-Basepath = "F:/Spark-Data/data-master/CTS-Demo/"
+Basepath = "F:/Spark-Data/data-master/CTS-Demo/Scripts-Commands/CTSH/"
 
 # Constant/List etc to generate dummy data
 PassengerFirstName = ["Jake","Billy","Emily","Eric","Robert","Mary","Heather","Phil","Russell","Nicole"]
@@ -38,14 +38,16 @@ def GenPassengers():
         bd = str(base64.b64encode(bytes(str(datetime.datetime.now() - datetime.timedelta(weeks=random.randint(1000, 2000)))[0:10]
                                     ,"utf-8")))[1:].replace("'","") #encoded
         # print(bd)
-        p = {"FirstName":f,"LastName":l,"MoreDetails":{"Gender":g,"DOB":bd}}
+        passport = random.choice(Alpha)+"-"+ str(random.randint(6683348,77456612))
+        mealPref = random.choice(["Veg","Non-Veg","Any"])
+        p = {"FirstName":f,"LastName":l,"MoreDetails":{"Passport":passport,"PersonalDetails":{"Gender":g,"DOB":bd,"MealPreference":mealPref}}}
         # print(p)
         Passengers.append(p)
-    # with open(Basepath+"Passengers.json","w") as fh:
-    #     for i in Passengers:
-    #         data = json.dumps(i)+"\n"
-    #         fh.writelines(data)
-    # fh.close()
+    with open(Basepath+"Passengers.json","w") as fh:
+        for i in Passengers:
+            data = json.dumps(i)+"\n"
+            fh.writelines(data)
+    fh.close()
 
 Aircrafts = []
 def AirCraftDetail():
@@ -57,24 +59,24 @@ def AirCraftDetail():
         add = {"AircraftName":v,"Capacity":c,"TailNumber":t}
         Aircrafts.append(add)
 
-    # with open(Basepath+"Aircrafts.txt","w") as fh:
-    #     fh.write("AircraftName\tCapacity\tTailNumber\n")
-    #     for i in Aircrafts:
-    #
-    #         v = i["AircraftName"]
-    #         c = i["Capacity"]
-    #         t = i["TailNumber"]
-    #         # print(str(i.values()))
-    #         data = v+"\t"+str(c)+"\t"+t+"\n"
-    #         fh.writelines(data)
-    # fh.close()
+    with open(Basepath+"Aircrafts.txt","w") as fh:
+        fh.write("AircraftName\tCapacity\tTailNumber\n")
+        for i in Aircrafts:
+
+            v = i["AircraftName"]
+            c = i["Capacity"]
+            t = i["TailNumber"]
+            # print(str(i.values()))
+            data = v+"\t"+str(c)+"\t"+t+"\n"
+            fh.writelines(data)
+    fh.close()
 
 # Function to generate Flight Journey details
 def GenTripDetails():
     # print("Nothing")
-    #producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
-     #                        value_serializer=lambda x:
-      #                       json.dumps(x).encode('utf-8'))
+    # producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+    #                          value_serializer=lambda x:
+    #                          json.dumps(x).encode('utf-8'))
     counter = random.randint(5,20)
     while(counter>0):
         P = random.choice(Passengers)
@@ -87,13 +89,13 @@ def GenTripDetails():
         sep = ","
         data = A["TailNumber"] + sep \
                + O + sep + D + sep + TD + sep + T + sep + R + sep \
-               + str(A["Capacity"]) + sep \
                + A["AircraftName"] + sep \
                + P["FirstName"] + sep \
                + P["LastName"] + sep \
-               + P["MoreDetails"]["DOB"]
+               + P["MoreDetails"]["Passport"] + "\n"
         print(data)
-        #producer.send('test',value=data,key=bytes(O+" "+D,'utf-8')#,headers=[('content-encoding', b'base64')]                      )
+        # producer.send('test',value=data,key=bytes(O+" "+D,'utf-8')#,headers=[('content-encoding', b'base64')]
+        #         #               )
         counter = counter -1
     time.sleep(random.randint(5,8))
     # with open(Basepath+"Trips.csv","w") as fh:

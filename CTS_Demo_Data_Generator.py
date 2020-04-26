@@ -1,5 +1,5 @@
 # Author:- Sumit Bunage
-# Purpose:- A Simple Python Program to Geenrate Dummy Flight Data for demo Purpose
+# Purpose:- A Simple Python Program to Generate Dummy Flight Data for demo Purpose
 
 # import necessary package
 import time
@@ -12,11 +12,11 @@ import os
 import json
 
 
-Basepath = "F:/Spark-Data/data-master/CTS-Demo/"
+Basepath = "F:/Spark-Data/data-master/CTS-Demo/Scripts-Commands/CTSH/"
 
 # Constant/List etc to generate dummy data
 PassengerFirstName = ["Jake","Billy","Emily","Eric","Robert","Mary","Heather","Phil","Russell","Nicole"]
-PassengerLastName = ["Greene","Anderson","Brown","Hawkins ","Richmond","Constantine","Coulson","Fury","Stark","Banner"]
+PassengerLastName = ["Greene","Anderson","Brown","Hawkins","Richmond","Constantine","Coulson","Fury","Stark","Banner"]
 PassengerGender = ["M","F"]
 Alpha = ["A","B","C","D","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
 Origin = ["ATL","LAX","ORD","DFW","DEN","JFK","SFO","SEA","LAS","MCO"]
@@ -37,7 +37,9 @@ def GenPassengers():
         bd = str(base64.b64encode(bytes(str(datetime.datetime.now() - datetime.timedelta(weeks=random.randint(1000, 2000)))[0:10]
                                     ,"utf-8")))[1:].replace("'","") #encoded
         # print(bd)
-        p = {"FirstName":f,"LastName":l,"MoreDetails":{"Gender":g,"DOB":bd}}
+        passport = random.choice(Alpha)+"-"+ str(random.randint(6683348,77456612))
+        mealPref = random.choice(["Veg","Non-Veg","Any"])
+        p = {"FirstName":f,"LastName":l,"MoreDetails":{"Passport":passport,"PersonalDetails":{"Gender":g,"DOB":bd,"MealPreference":mealPref}}}
         # print(p)
         Passengers.append(p)
     with open(Basepath+"Passengers.json","w") as fh:
@@ -72,8 +74,11 @@ def AirCraftDetail():
 def GenTripDetails():
     # print("Nothing")
     with open(Basepath+"Trips.csv","w") as fh:
-        fh.writelines("TailNumber,Origin,Destination,TravelDate,TravelTime,SeatPrice,Capacity,AircraftName,FirstName,LastName,DOB\n")
+        # fh.writelines("TailNumber,Origin,Destination,TravelDate,TravelTime,SeatPrice,Capacity,AircraftName,FirstName,LastName,DOB\n")
+        fh.writelines(
+            "TailNumber,Origin,Destination,TravelDate,TotalFlightTime,Revenue,AircraftName,FirstName,LastName,Passport\n")
         for i in range(1, 1000):
+
             P = random.choice(Passengers)
             A = random.choice(Aircrafts)
             O = random.choice(Origin) #Origin
@@ -84,11 +89,10 @@ def GenTripDetails():
             sep = ","
             data = A["TailNumber"] + sep \
                    + O + sep + D + sep + TD + sep + T + sep + R + sep \
-                   + str(A["Capacity"]) + sep \
                    + A["AircraftName"] + sep \
                    + P["FirstName"] + sep \
                    + P["LastName"] + sep \
-                   + P["MoreDetails"]["DOB"] + "\n"
+                   + P["MoreDetails"]["Passport"] + "\n"
             # print(data)
             fh.writelines(data)
         fh.close()
