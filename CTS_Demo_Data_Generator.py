@@ -12,7 +12,7 @@ import os
 import json
 
 
-Basepath = "F:/Spark-Data/data-master/CTS-Demo/Scripts-Commands/CTSH/"
+Basepath = "F:/Genc-INTCDB21DW056/"
 
 # Constant/List etc to generate dummy data
 PassengerFirstName = ["Jake","Billy","Emily","Eric","Robert","Mary","Heather","Phil","Russell","Nicole"]
@@ -40,7 +40,7 @@ def GenPassengers():
         passport = random.choice(Alpha)+"-"+ str(random.randint(6683348,77456612))
         mealPref = random.choice(["Veg","Non-Veg","Any"])
         someint = random.randint(1,100)
-        p = {"FirstName":f,"LastName":l,"randomint":someint,"MoreDetails":{"Passport":passport,"PersonalDetails":{"Gender":g,"DOB":bd,"MealPreference":mealPref}}}
+        p = {"FirstName":f,"LastName":l,"MoreDetails":{"Passport":passport,"PersonalDetails":{"Gender":g,"DOB":bd,"MealPreference":mealPref}}}
         # print(p)
         Passengers.append(p)
     with open(Basepath+"Passengers.json","w") as fh:
