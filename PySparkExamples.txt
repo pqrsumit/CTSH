@@ -6,8 +6,29 @@ spark.sql('select FirstName,LastName,decode(unbase64(MoreDetails.PersonalDetails
 myrdd = spark.sparkContext.textFile('/FileStore/tables/Aircrafts.txt')
 myrdd.map(lambda x:x.split('\t')).take(10)
 
-states = {"NY":"New York", "CA":"California", "FL":"Florida"}
-broadcastStates = spark.sparkContext.broadcast(states)
+airports = {
+"ATL":"Atlanta"
+,"LAX":"Los Angeles"
+,"ORD":"Chicago"
+,"DFW":"Dallas"
+,"DEN":"Denevar"
+,"JFK":"New York"
+,"SFO":"San Francisco"
+,"SEA":"Seattle"
+,"LAS":"Las Vegas"
+,"MCO":"Orlando"
+,"EWR":"Newark"
+,"CLT":"Charlotte"
+,"PHX":"Phoenix"
+,"IAH":"Houston"
+,"MIA":"Miami"
+,"BOS":"Boston"
+,"MSP":"Minneapolis"
+,"FLL":"Fort Lauderdale"
+,"DTW":"Detroit"
+,"PHL":"Philadelphia"
+}
+broadcastAirports = spark.sparkContext.broadcast(airports)
 
 
 myrdd = spark.sparkContext.textFile('/FileStore/tables/Aircrafts.txt')
