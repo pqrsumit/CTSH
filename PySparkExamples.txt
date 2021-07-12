@@ -1,0 +1,31 @@
+mydf = spark.read.json('/FileStore/tables/Passengers.json')
+mydf.show(2)
+mydf.createOrReplaceTempView('Passengers')
+spark.sql('select FirstName,LastName,decode(unbase64(MoreDetails.PersonalDetails.DOB),"utf-8") from Passengers').show(4)
+
+myrdd = spark.sparkContext.textFile('/FileStore/tables/Aircrafts.txt')
+myrdd.map(lambda x:x.split('\t')).take(10)
+
+states = {"NY":"New York", "CA":"California", "FL":"Florida"}
+broadcastStates = spark.sparkContext.broadcast(states)
+
+
+myrdd = spark.sparkContext.textFile('/FileStore/tables/Aircrafts.txt')
+header = myrdd.first()
+transdrdd = myrdd.filter(lambda d:d!=header)
+transdrdd.take(9)
+rddsplit=transdrdd.map(lambda x:(x.split('\t')[0],int(x.split('\t')[1]),x.split('\t')[2]))
+r = spark.createDataFrame(rddsplit,schema=['AircraftName','Capacity','TailNumber'])
+r.show(10)
+
+raw_trips = spark.read.csv(path='/FileStore/tables/Trips.csv',header=True,sep=',',inferSchema=True)
+raw_trips.printSchema
+trips = raw_trips.selectExpr('TailNumber','Origin','Destination','date(substr(cast(TravelDate as string),1,10))as TravelDate'
+                             ,'TravelTime','SeatPrice','Capacity','AircraftName','FirstName','LastName'
+                             ,'date(decode(unbase64(DOB),"utf-8")) as DOB'
+                            )
+trips.show(10)
+trips.printSchema
+trips.createOrReplaceTempView('Trips')
+bd=spark.sql('select * from Trips where substr(cast(TravelDate as string),6,5)=substr(cast(DOB as string),6,5)')
+bd.write.saveAsTable(name='BirthdayTravelers',mode='overwrite',format='orc')
